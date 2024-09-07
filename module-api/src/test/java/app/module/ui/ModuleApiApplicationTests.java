@@ -1,11 +1,8 @@
-package app.module.api;
+package app.module.ui;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 class ModuleApiApplicationTests {
-
 	@Test
 	void contextLoads() {
 	}

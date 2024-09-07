@@ -1,18 +1,18 @@
-package app.module.batch;
+package app.batch;
 
-import app.module.core.ImpleService;
+import app.core.ImpleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class BatchProcess {
 
 	private final ImpleService impleService;
 
 	public List<String> run() {
-		return List.of("batch process1", "batch process2", "batch process3");
+		return impleService.get();
 	}
 }

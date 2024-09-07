@@ -1,4 +1,4 @@
-package app.module.core.domain.common;
+package app.core.domain.common;
 
 
 import jakarta.persistence.Column;

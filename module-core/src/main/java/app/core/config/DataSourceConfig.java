@@ -1,4 +1,4 @@
-package app.module.core.config;
+package app.core.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;

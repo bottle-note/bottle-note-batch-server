@@ -1,4 +1,4 @@
-package app.module.core.domain.alcohol.constant;
+package app.core.domain.alcohol.constant;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;

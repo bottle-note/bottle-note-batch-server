@@ -1,6 +1,6 @@
-package app.module.core.domain;
+package app.core.domain.alcohol;
 
-import app.module.core.domain.common.BaseEntity;
+import app.core.domain.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

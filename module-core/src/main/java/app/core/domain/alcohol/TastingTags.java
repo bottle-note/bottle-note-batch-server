@@ -1,6 +1,6 @@
-package app.module.core.domain.alcohol;
+package app.core.domain.alcohol;
 
-import app.module.core.domain.common.BaseTimeEntity;
+import app.core.domain.common.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

@@ -1,10 +1,9 @@
-package app.module.core.domain.alcohol;
+package app.core.domain.alcohol;
 
 
-import app.module.core.domain.Region;
-import app.module.core.domain.alcohol.constant.AlcoholCategoryGroup;
-import app.module.core.domain.alcohol.constant.AlcoholType;
-import app.module.core.domain.common.BaseEntity;
+import app.core.domain.alcohol.constant.AlcoholCategoryGroup;
+import app.core.domain.alcohol.constant.AlcoholType;
+import app.core.domain.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
