@@ -2,7 +2,7 @@ package app.module.ui;
 
 import org.junit.jupiter.api.Test;
 
-class ModuleApiApplicationTests {
+class BatchApplicationTests {
 	@Test
 	void contextLoads() {
 	}

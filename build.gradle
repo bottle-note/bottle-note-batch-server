@@ -70,9 +70,9 @@ jar {
 }
 
 springBoot {
-    mainClass = 'app.ModuleApiApplication'
+    mainClass = 'app.BatchApplication'
 }
 
 tasks.named("bootRun") {
-    mainClass = 'app.ModuleApiApplication'
+    mainClass = 'app.BatchApplication'
 }

@@ -1,5 +1,6 @@
 rootProject.name = 'bottle-note-batch-server'
 
 include 'module-api'
+include "module-common"
 include 'module-batch'
 include "module-core"
