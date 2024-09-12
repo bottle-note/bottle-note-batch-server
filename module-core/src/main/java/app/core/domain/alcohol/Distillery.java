@@ -11,7 +11,7 @@ import org.hibernate.annotations.Comment;
 
 @Comment("증류소")
 @Table(name = "distillery")
-@Entity(name = "core_distillery")
+@Entity(name = "distillery")
 public class Distillery extends BaseEntity {
 
 	@Id

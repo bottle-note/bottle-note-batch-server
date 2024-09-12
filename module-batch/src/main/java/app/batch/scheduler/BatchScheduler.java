@@ -1,4 +1,4 @@
-package app.batch;
+package app.batch.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +25,9 @@ public class BatchScheduler {
 	private final JobRegistry jobRegistry;
 
 	@Scheduled(cron = "0 0 0 * * *")//매일 0시 0분 0초에 실행
-	public void runJob() {
+	public void dailyRun() {
 		String time = LocalDateTime.now().toString();
 		try {
-
 			log.info(jobRegistry.getJobNames().toString());
 			Job job = jobRegistry.getJob("simple"); // job 이름
 			JobParametersBuilder jobParam = new JobParametersBuilder().addString("time", time);

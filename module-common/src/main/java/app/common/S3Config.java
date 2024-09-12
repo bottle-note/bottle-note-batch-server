@@ -17,9 +17,9 @@ public class S3Config {
     private final String secretKey;
     private final String region;
 
-    public S3Config(@Value("${aws.access}") String access,
-                    @Value("${aws.secret}") String secret,
-                    @Value("${aws.region}") String region) {
+    public S3Config(@Value("aws.access") String access,
+                    @Value("aws.secret") String secret,
+                    @Value("aws.region") String region) {
         this.accessKey = access;
         this.secretKey = secret;
         this.region = region;

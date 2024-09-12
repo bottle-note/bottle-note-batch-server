@@ -22,7 +22,7 @@ import org.hibernate.annotations.Comment;
 
 @Getter
 @Table(name = "alcohol")
-@Entity(name = "core_alcohol")
+@Entity(name = "alcohol")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Alcohol extends BaseEntity {
 
