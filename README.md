@@ -8,10 +8,11 @@
 
 ```mermaid
 flowchart LR
-    B[module_api] --> D[module_core]
+    B[module_api] --> CC[Trigger]
+    CC[Trigger] --> C[module_batch]
+    C[module_batch] --> D[module_core]
     B --> E[module_common]
     D --> E
-    C[module_batch] --> D
     C --> E
 ```
 
