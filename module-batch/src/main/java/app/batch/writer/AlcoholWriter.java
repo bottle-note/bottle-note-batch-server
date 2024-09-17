@@ -10,12 +10,26 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AlcoholWriter {
 
-	@Bean
-	public ItemWriter<Alcohol> jpaPagingItemWriter() {
-		return list -> {
-			for (Alcohol alcohol : list) {
-				log.info("write thread name: {}, alcohol id: {}", Thread.currentThread().getName(), alcohol.getId());
-			}
-		};
-	}
+  @Bean
+  public ItemWriter<Alcohol> jpaPagingItemWriter() {
+    return list -> {
+      for (Alcohol alcohol : list) {
+        log.info(
+            "write thread name: {}, alcohol id: {}",
+            Thread.currentThread().getName(),
+            alcohol.getId());
+      }
+    };
+  }
+
+  public ItemWriter<? super Alcohol> simpleWriter() {
+    return list -> {
+      for (Alcohol alcohol : list) {
+        log.info(
+            "write thread name: {}, alcohol id: {}",
+            Thread.currentThread().getName(),
+            alcohol.getId());
+      }
+    };
+  }
 }

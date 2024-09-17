@@ -12,16 +12,26 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class AlcoholReader {
 
-	private final EntityManagerFactory entityManagerFactory;
+  private final EntityManagerFactory entityManagerFactory;
 
-	@Bean
-	public JpaPagingItemReader<Alcohol> jpaPagingItemReader() {
-		final int CHUNK_SIZE = 10;
-		return new JpaPagingItemReaderBuilder<Alcohol>()
-			.name("alcoholReader")
-			.entityManagerFactory(entityManagerFactory)
-			.pageSize(CHUNK_SIZE)
-			.queryString("select p from alcohol p order by p.id")
-			.build();
-	}
+  @Bean
+  public JpaPagingItemReader<Alcohol> jpaPagingItemReader() {
+    final int CHUNK_SIZE = 10;
+    return new JpaPagingItemReaderBuilder<Alcohol>()
+        .name("alcoholReader")
+        .entityManagerFactory(entityManagerFactory)
+        .pageSize(CHUNK_SIZE)
+        .queryString("select p from alcohol p order by p.id")
+        .build();
+  }
+
+  @Bean
+  public JpaPagingItemReader<Alcohol> simpleReader() {
+    return new JpaPagingItemReaderBuilder<Alcohol>()
+        .name("simpleReader")
+        .entityManagerFactory(entityManagerFactory)
+        .pageSize(10)
+        .queryString("select p from alcohol p order by p.id")
+        .build();
+  }
 }

@@ -4,7 +4,8 @@ logging:
       hibernate:
         type:
           descriptor:
-            sql: debug
+            sql: info
+    root: info
 
 spring:
   datasource:
@@ -12,7 +13,9 @@ spring:
     url: ${DB_URL:jdbc:localhost:3306/local_db}
     username: ${DB_USERNAME:username}
     password: ${DB_PASSWORD:password}
-
+  batch:
+    job:
+      name: simple
 aws:
   access: edsadsa
   secret: dsadsadsa
