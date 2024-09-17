@@ -19,7 +19,7 @@ import org.hibernate.annotations.Comment;
     uniqueConstraints = {
       @UniqueConstraint(
           name = "uniq_alcohol_year_month",
-          columnNames = {"alcohol_id", "year", "month"})
+          columnNames = {"alcohol_id", "year", "month", "day"})
     })
 @Getter
 @Builder
