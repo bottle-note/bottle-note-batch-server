@@ -1,10 +1,9 @@
 package app.batch.job;
 
-import app.batch.step.AlcoholBatchStepConfiguration;
+import app.batch.step.AlcoholStepConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.context.annotation.Bean;
@@ -13,11 +12,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Slf4j
 @Configuration
-@EnableBatchProcessing
 @RequiredArgsConstructor
-public class AlcoholBatchJobConfiguration {
+public class AlcoholJobConfiguration {
 
-  private final AlcoholBatchStepConfiguration alcoholBatchStepConfiguration;
+  private final AlcoholStepConfiguration alcoholStepConfiguration;
 
   @Bean
   public Job alcoholReadJob(
@@ -27,7 +25,7 @@ public class AlcoholBatchJobConfiguration {
 
     Job jpaPagingItemReaderJob =
         new JobBuilder("pagingItemReaderJobSub", jobRepository)
-            .start(alcoholBatchStepConfiguration.alcoholStep(jobRepository, transactionManager))
+            .start(alcoholStepConfiguration.alcoholStep(jobRepository, transactionManager))
             .build();
 
     long endAt = System.nanoTime();
@@ -40,16 +38,7 @@ public class AlcoholBatchJobConfiguration {
   public Job simpleJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
     log.info("SimpleJobConfiguration 실행");
     return new JobBuilder("simple", jobRepository)
-        .start(alcoholBatchStepConfiguration.simpleJob(jobRepository, transactionManager))
-        .build();
-  }
-
-  @Bean
-  public Job popularityJob(
-      JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-    log.info("PopularityJobConfiguration 실행");
-    return new JobBuilder("popularityJob", jobRepository)
-        .start(alcoholBatchStepConfiguration.popularityStep(jobRepository, transactionManager))
+        .start(alcoholStepConfiguration.simpleJob(jobRepository, transactionManager))
         .build();
   }
 }

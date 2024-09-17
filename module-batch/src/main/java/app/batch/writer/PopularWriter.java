@@ -11,16 +11,16 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class PopularityWriter {
+public class PopularWriter {
 
-	private final DataSource dataSource;
-	private final EntityManagerFactory entityManagerFactory;
+  private final DataSource dataSource;
+  private final EntityManagerFactory entityManagerFactory;
 
-	@Bean
-	public JpaItemWriter<PopularAlcohol> popularityItemWriter() {
-		return new JpaItemWriterBuilder<PopularAlcohol>()
-			.entityManagerFactory(entityManagerFactory)
-			.usePersist(false) // 존재하는 엔티티는 병합(merge)하도록 설정
-			.build();
-	}
+  @Bean
+  public JpaItemWriter<PopularAlcohol> popularityItemWriter() {
+    return new JpaItemWriterBuilder<PopularAlcohol>()
+        .entityManagerFactory(entityManagerFactory)
+        .usePersist(false)
+        .build();
+  }
 }

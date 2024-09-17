@@ -1,6 +1,6 @@
 package app.batch.reader;
 
-import app.core.domain.common.PopularityData;
+import app.core.domain.common.PopularData;
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,13 +12,14 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class PopularityReader {
+public class PopularReader {
 
-	private final DataSource dataSource;
+  private final DataSource dataSource;
 
-	@Bean
-	public JdbcCursorItemReader<PopularityData> popularityItemReader() {
-		String sqlQuery = """
+  @Bean
+  public JdbcCursorItemReader<PopularData> popularityItemReader() {
+    String sqlQuery =
+        """
 			-- 인기 점수 계산을 위한 SQL 쿼리
 			SELECT rv.alcohol_id,
 			       -- 리뷰 점수 계산
@@ -93,15 +94,13 @@ public class PopularityReader {
 			ORDER BY rv.alcohol_id;
 			""";
 
-		// SQL 쿼리 로그 출력
-		log.debug("Executing SQL Query:\n{}", sqlQuery);
-
-		return new JdbcCursorItemReaderBuilder<PopularityData>()
-			.name("popularityItemReader")
-			.dataSource(dataSource)
-			.sql(sqlQuery)
-			.rowMapper(new PopularityDataRowMapper())
-			.build();
-	}
-
+    // SQL 쿼리 로그 출력
+    log.debug("Executing SQL Query:\n{}", sqlQuery);
+    return new JdbcCursorItemReaderBuilder<PopularData>()
+        .name("popularityItemReader")
+        .dataSource(dataSource)
+        .sql(sqlQuery)
+        .rowMapper(new PopularDataRowMapper())
+        .build();
+  }
 }

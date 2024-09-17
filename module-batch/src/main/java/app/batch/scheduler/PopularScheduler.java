@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BatchScheduler {
+public class PopularScheduler {
 
   private final JobLauncher jobLauncher;
   private final JobRegistry jobRegistry;
@@ -27,9 +27,10 @@ public class BatchScheduler {
   public void dailyRun() {
     String time = LocalDateTime.now().toString();
     try {
-      log.info(jobRegistry.getJobNames().toString());
 
+      log.info(jobRegistry.getJobNames().toString());
       Job job = jobRegistry.getJob("simple"); // job 이름
+
       JobParametersBuilder jobParam =
           new JobParametersBuilder()
               .addString("jobName", "pagingItemReaderJobSub")
