@@ -20,7 +20,7 @@ public class PopularWriter {
   public JpaItemWriter<PopularAlcohol> popularityItemWriter() {
     return new JpaItemWriterBuilder<PopularAlcohol>()
         .entityManagerFactory(entityManagerFactory)
-        .usePersist(false)
+        .usePersist(true)
         .build();
   }
 }

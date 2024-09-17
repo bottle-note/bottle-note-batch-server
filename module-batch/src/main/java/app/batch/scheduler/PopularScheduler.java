@@ -5,13 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.NoSuchJobException;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -23,27 +18,24 @@ public class PopularScheduler {
   private final JobLauncher jobLauncher;
   private final JobRegistry jobRegistry;
 
-  @Scheduled(cron = "0 0 0 * * *") // 매일 0시 0분 0초에 실행
-  public void dailyRun() {
-    String time = LocalDateTime.now().toString();
-    try {
+  @Scheduled(cron = "0 0 1 * * *") // 매일 1시 0분 0초에 실행
+  public void dailyRun() throws Exception {
 
-      log.info(jobRegistry.getJobNames().toString());
-      Job job = jobRegistry.getJob("simple"); // job 이름
+    final String jobName = "popularityJob";
 
-      JobParametersBuilder jobParam =
-          new JobParametersBuilder()
-              .addString("jobName", "pagingItemReaderJobSub")
-              .addString("time", time);
+    log.info("start scheduler {} : {}", jobName, LocalDateTime.now());
 
-      jobLauncher.run(job, jobParam.toJobParameters());
-
-    } catch (NoSuchJobException
-        | JobInstanceAlreadyCompleteException
-        | JobExecutionAlreadyRunningException
-        | JobParametersInvalidException
-        | JobRestartException e) {
-      throw new RuntimeException("Job 실행 중 오류가 발생했습니다.", e);
+    if (!jobRegistry.getJobNames().toString().contains(jobName)) {
+      throw new IllegalAccessException("존재하지 않은 JOB 입니디.");
     }
+
+    Job job = jobRegistry.getJob(jobName); // job 이름
+
+    JobParametersBuilder jobParam =
+        new JobParametersBuilder()
+            .addLocalDateTime("localDateTime", LocalDateTime.now())
+            .addString("jobName", jobName);
+
+    jobLauncher.run(job, jobParam.toJobParameters());
   }
 }
