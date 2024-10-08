@@ -1,5 +1,9 @@
-bootJar.enabled = true
 jar.enabled = false
+
+bootJar {
+    enabled = true
+    archiveFileName = 'app.jar'
+}
 
 dependencies {
     implementation project(':module-core')

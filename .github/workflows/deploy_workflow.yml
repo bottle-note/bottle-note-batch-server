@@ -1,6 +1,9 @@
 name: Deploy Workflow
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     types: [ closed ]
     branches:
@@ -9,7 +12,6 @@ on:
 
 jobs:
   build-and-push:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -25,9 +27,9 @@ jobs:
         uses: burnett01/rsync-deployments@6.0.0
         with:
           switches: -avzr --delete # rsync 명령어 옵션
-          remote_path: /home/ubuntu/app/bottle-note
+          remote_path: /home/bottlenote/app/bottle-note-batch-server
           remote_host: ${{ secrets.DEV_SERVER_IP }}
-          remote_user: ubuntu
+          remote_user: bottlenote
           remote_key: ${{ secrets.DEV_SSH_KEY }}
 
       ## deploy setup
@@ -38,9 +40,9 @@ jobs:
           username: ubuntu
           key: ${{ secrets.DEV_SSH_KEY }}
           script: |
-            cd /home/ubuntu/app/bottle-note
-            touch  /home/ubuntu/app/bottle-note/src/main/resources/application-dev.yml
-            echo "${{ secrets.APPLICATION_DEV }}" | base64 --decode > src/main/resources/application-dev.yml  
+            cd /home/bottlenote/app/bottle-note-batch-server
+            touch  /home/bottlenote/app/bottle-note-batch-server.env
+            echo "${{ secrets.ENV }}" > .env  
             chmod +x gradlew
             ./gradlew build
 
@@ -51,11 +53,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.DEV_SSH_KEY }}
           script: |
-            cd /home/ubuntu/app/bottle-note
-            # 기존 실행 중인 컨테이너 중지 및 제거
-            docker stop dev-bottle-note || true
-            docker rm dev-bottle-note || true
-            # Docker Compose를 이용한 컨테이너 빌드 및 실행
-            docker-compose -f docker-compose-dev.yml up -d --no-deps --build dev-bottle-note
-            # 사용하지 않는 이미지 정리
+            cd /home/bottlenote/app/bottle-note-batch-server
+            docker stop batch-bottle-note || true
+            docker rm batch-bottle-note || true
+            docker-compose up -d --no-deps --build batch-bottle-note
             docker image prune -f

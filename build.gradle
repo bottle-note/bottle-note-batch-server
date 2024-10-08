@@ -8,9 +8,9 @@ group = 'bottlenote-batch'
 version = '0.0.1-SNAPSHOT'
 
 
-java {
-    sourceCompatibility = '17'
-}
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -25,9 +25,13 @@ allprojects {
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
 
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+
     repositories {
         mavenCentral()
     }
+
     java {
         sourceCompatibility = '17'
         targetCompatibility = '17'
@@ -61,14 +65,13 @@ subprojects {
     }
 }
 
-
 bootJar {
     enabled = false
 }
+
 jar {
     enabled = true
 }
-
 springBoot {
     mainClass = 'app.BatchApplication'
 }

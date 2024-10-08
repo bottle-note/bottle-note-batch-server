@@ -6,13 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -26,8 +25,9 @@ public class ImageHistory {
 
     private Long imageCount;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDateTime time = LocalDateTime.now();
+  @Builder.Default
+  @Column(nullable = false, columnDefinition = "TIMESTAMP")
+  private LocalDateTime time = LocalDateTime.now();
 
     public static ImageHistory create(Long imageCount) {
         return new ImageHistory(null, imageCount, LocalDateTime.now());
