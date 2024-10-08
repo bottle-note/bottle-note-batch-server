@@ -27,7 +27,7 @@ public class PopularProcessor implements ItemProcessor<PopularData, PopularAlcoh
         .reviewScore(BigDecimal.valueOf(popularData.reviewScore()))
         .ratingScore(BigDecimal.valueOf(popularData.ratingScore()))
         .pickScore(BigDecimal.valueOf(popularData.pickScore()))
-        .popularScore(BigDecimal.valueOf(popularData.popularityScore()))
+        .popularScore(BigDecimal.valueOf(popularData.popularScore()))
         .build();
   }
 }

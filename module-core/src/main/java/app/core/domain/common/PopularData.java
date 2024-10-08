@@ -8,4 +8,4 @@ public record PopularData(
     Double reviewScore,
     Double ratingScore,
     Double pickScore,
-    Double popularityScore) {}
+    Double popularScore) {}

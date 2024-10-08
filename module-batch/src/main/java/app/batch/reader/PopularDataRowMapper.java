@@ -17,8 +17,8 @@ public class PopularDataRowMapper implements RowMapper<PopularData> {
             .reviewScore(rs.getObject("review_score") != null ? rs.getDouble("review_score") : null)
             .ratingScore(rs.getObject("rating_score") != null ? rs.getDouble("rating_score") : null)
             .pickScore(rs.getObject("pick_score") != null ? rs.getDouble("pick_score") : null)
-            .popularityScore(
-                rs.getObject("popularity_score") != null ? rs.getDouble("popularity_score") : null)
+            .popularScore(
+                rs.getObject("popular_score") != null ? rs.getDouble("popular_score") : null)
             .build();
 
     log.debug("Mapped PopularData: {}", data);
