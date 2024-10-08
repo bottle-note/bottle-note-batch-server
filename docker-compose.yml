@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   batch-bottle-note:
     container_name: batch-bottle-note
