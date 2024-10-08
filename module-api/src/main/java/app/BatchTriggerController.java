@@ -16,8 +16,8 @@ public class BatchTriggerController {
 		batchTrigger.runJob("popularityJob");
 	}
 
-  @GetMapping("/")
-  public ResponseEntity<?> hello() throws Exception {
+  @GetMapping("/hello")
+  public ResponseEntity<String> hello() throws Exception {
     return ResponseEntity.ok("Hello Batch Trigger");
   }
 }
