@@ -2,6 +2,7 @@ package app;
 
 import app.batch.trigger.BatchTrigger;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,4 +15,9 @@ public class BatchTriggerController {
 	public void triggerBatch() throws Exception {
 		batchTrigger.runJob("popularityJob");
 	}
+
+  @GetMapping("/")
+  public ResponseEntity<?> hello() throws Exception {
+    return ResponseEntity.ok("Hello Batch Trigger");
+  }
 }

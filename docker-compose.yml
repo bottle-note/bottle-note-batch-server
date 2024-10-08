@@ -8,6 +8,3 @@ services:
       - .env
     ports:
       - "28080:28080"
-networks:
-  network:
-    driver: bridge
