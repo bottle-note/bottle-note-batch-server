@@ -1,7 +1,6 @@
 package app.batch.step;
 
 import app.batch.reader.AlcoholReader;
-import app.batch.writer.AlcoholWriter;
 import app.core.domain.alcohol.Alcohol;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Step;

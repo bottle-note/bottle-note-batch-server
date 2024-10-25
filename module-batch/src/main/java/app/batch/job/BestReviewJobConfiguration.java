@@ -1,11 +1,13 @@
 package app.batch.job;
 
 import app.batch.step.AlcoholStepConfiguration;
+import app.core.domain.alcohol.Alcohol;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -13,7 +15,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class AlcoholJobConfiguration {
+public class BestReviewJobConfiguration {
 
   private final AlcoholStepConfiguration alcoholStepConfiguration;
 
@@ -40,5 +42,27 @@ public class AlcoholJobConfiguration {
     return new JobBuilder("simple", jobRepository)
         .start(alcoholStepConfiguration.simpleJob(jobRepository, transactionManager))
         .build();
+  }
+
+  public ItemWriter<Alcohol> jpaPagingItemWriter() {
+    return list -> {
+      for (Alcohol alcohol : list) {
+        log.info(
+            "write thread name: {}, alcohol id: {}",
+            Thread.currentThread().getName(),
+            alcohol.getId());
+      }
+    };
+  }
+
+  public ItemWriter<? super Alcohol> simpleWriter() {
+    return list -> {
+      for (Alcohol alcohol : list) {
+        log.info(
+            "write thread name: {}, alcohol id: {}",
+            Thread.currentThread().getName(),
+            alcohol.getId());
+      }
+    };
   }
 }

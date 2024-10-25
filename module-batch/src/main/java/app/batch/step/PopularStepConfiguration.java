@@ -24,7 +24,8 @@ public class PopularStepConfiguration {
 
   @Bean
   public Step popularStep(
-      JobRepository jobRepository, PlatformTransactionManager transactionManager) throws IOException {
+      JobRepository jobRepository, PlatformTransactionManager transactionManager)
+      throws IOException {
 
     final int CHUNK_SIZE = 100;
 

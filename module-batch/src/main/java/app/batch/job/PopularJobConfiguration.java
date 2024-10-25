@@ -20,7 +20,8 @@ public class PopularJobConfiguration {
 
   @Bean
   public Job popularityJob(
-      JobRepository jobRepository, PlatformTransactionManager transactionManager) throws IOException {
+      JobRepository jobRepository, PlatformTransactionManager transactionManager)
+      throws IOException {
     log.info("PopularityJobConfiguration 실행");
     return new JobBuilder("popularityJob", jobRepository)
         .start(stepConfiguration.popularStep(jobRepository, transactionManager))
