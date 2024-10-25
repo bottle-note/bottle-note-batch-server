@@ -5,6 +5,7 @@ import app.batch.reader.PopularReader;
 import app.batch.writer.PopularWriter;
 import app.core.domain.common.PopularData;
 import app.core.domain.popular.PopularAlcohol;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;
@@ -23,8 +24,10 @@ public class PopularStepConfiguration {
 
   @Bean
   public Step popularStep(
-      JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-    int CHUNK_SIZE = 100;
+      JobRepository jobRepository, PlatformTransactionManager transactionManager) throws IOException {
+
+    final int CHUNK_SIZE = 100;
+
     return new StepBuilder("popularStep", jobRepository)
         .<PopularData, PopularAlcohol>chunk(CHUNK_SIZE, transactionManager)
         .reader(popularReader.popularityItemReader())

@@ -1,6 +1,7 @@
 package app.batch.job;
 
 import app.batch.step.PopularStepConfiguration;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -19,7 +20,7 @@ public class PopularJobConfiguration {
 
   @Bean
   public Job popularityJob(
-      JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+      JobRepository jobRepository, PlatformTransactionManager transactionManager) throws IOException {
     log.info("PopularityJobConfiguration 실행");
     return new JobBuilder("popularityJob", jobRepository)
         .start(stepConfiguration.popularStep(jobRepository, transactionManager))

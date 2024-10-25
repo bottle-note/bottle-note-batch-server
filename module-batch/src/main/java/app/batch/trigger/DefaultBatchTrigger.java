@@ -18,7 +18,7 @@ public class DefaultBatchTrigger implements BatchTrigger {
 
   @Override
   public List<String> callListener() {
-    return List.of();
+    return jobRegistry.getJobNames().stream().toList();
   }
 
   @Override
@@ -39,4 +39,7 @@ public class DefaultBatchTrigger implements BatchTrigger {
 
     jobLauncher.run(job, jobParam.toJobParameters());
   }
+
+
+
 }

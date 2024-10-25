@@ -1,5 +1,7 @@
 package app.batch.scheduler;
 
+import static java.time.LocalTime.now;
+
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +25,13 @@ public class PopularScheduler {
 
     final String jobName = "popularityJob";
 
-    log.info("start scheduler {} : {}", jobName, LocalDateTime.now());
-
-    if (!jobRegistry.getJobNames().toString().contains(jobName)) {
-      throw new IllegalAccessException("존재하지 않은 JOB 입니디.");
-    }
+    log.info("start scheduler {} : {}", jobName, now());
 
     Job job = jobRegistry.getJob(jobName); // job 이름
 
     JobParametersBuilder jobParam =
         new JobParametersBuilder()
-            .addLocalDateTime("localDateTime", LocalDateTime.now())
+            .addLocalDateTime("localDateTime", LocalDateTime.from(now()))
             .addString("jobName", jobName);
 
     jobLauncher.run(job, jobParam.toJobParameters());
