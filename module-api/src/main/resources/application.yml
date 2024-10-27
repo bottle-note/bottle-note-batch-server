@@ -19,7 +19,13 @@ spring:
   batch:
     job:
       name: simple
-aws:
-  access: edsadsa
-  secret: dsadsadsa
-  region: us-east-1
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
+
+batch:
+  query:
+    best-review: ${BEST_REVIEW_QUERY:SELECT * FROM review}
+    popular: ${POPULAR_QUERY:SELECT * FROM review WHERE rating > 3}
