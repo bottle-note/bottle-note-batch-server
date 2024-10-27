@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Batch Job Control</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <style>
+        .container {
+            max-width: 600px;
+        }
+
+        .section {
+            padding-top: 50px;
+        }
+
+        .box {
+            padding: 2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .title, .subtitle {
+            text-align: center;
+            color: #4a4a4a;
+        }
+
+        .button.is-primary {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .select {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">Batch Job Control</h1>
+
+        <div class="box">
+            <h2 class="subtitle">Available Batch Jobs</h2>
+
+            <div class="field">
+                <label class="label" for="jobName">배치잡 이름</label>
+                <div class="control select is-fullwidth">
+                    <select id="jobName">
+                        <option th:each="jobName : ${jobNames}" th:text="${jobName}" th:value="${jobName}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="button is-primary" onclick="runBatch()">Run Selected Job</button>
+        </div>
+    </div>
+</section>
+
+<script>
+    function runBatch() {
+        const jobName = document.getElementById("jobName").value;
+        fetch('/batch/run?jobName=' + jobName, {method: 'POST'})
+            .then(response => response.ok ? alert("Batch job " + jobName + " started successfully") : alert("Failed to start batch job"))
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+</body>
+</html>
