@@ -1,5 +1,6 @@
 package app.batch.trigger;
 
+import app.batch.scheduler.BestReviewScheduler;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ public class DefaultBatchTrigger implements BatchTrigger {
 
   private final JobLauncher jobLauncher;
   private final JobRegistry jobRegistry;
+  private final BestReviewScheduler bestReviewScheduler;
 
   @Override
   public List<String> callListener() {
@@ -23,15 +25,23 @@ public class DefaultBatchTrigger implements BatchTrigger {
 
   @Override
   public void runJob(String jobName) throws Exception {
-
-    System.out.println(jobRegistry.getJobNames()); // popularityJob
-
-    if (!jobRegistry.getJobNames().toString().contains(jobName)) {
+    if (!jobRegistry.getJobNames().toString().contains(jobName))
       throw new IllegalAccessException("존재하지 않은 JOB 입니디.");
+
+    if (jobName.equals("bestReviewSelectedJob")) {
+      callBestReviewScheduler();
+    } else {
+      callJob(jobName);
     }
+  }
+
+  void callBestReviewScheduler() throws Exception {
+    bestReviewScheduler.bestReviewDailyRun();
+  }
+
+  void callJob(String jobName) throws Exception {
 
     Job job = jobRegistry.getJob(jobName); // job 이름
-
     JobParametersBuilder jobParam =
         new JobParametersBuilder()
             .addLocalDateTime("localDateTime", LocalDateTime.now())
@@ -39,7 +49,4 @@ public class DefaultBatchTrigger implements BatchTrigger {
 
     jobLauncher.run(job, jobParam.toJobParameters());
   }
-
-
-
 }

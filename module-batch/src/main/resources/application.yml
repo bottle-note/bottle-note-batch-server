@@ -15,7 +15,7 @@ spring:
   batch:
     job:
       name: simple
-aws:
-  access: edsadsa
-  secret: dsadsadsa
-  region: us-east-1
+
+batch:
+  query:
+    best-review: ${BEST_REVIEW_QUERY:SELECT * FROM review WHERE rating > 4}

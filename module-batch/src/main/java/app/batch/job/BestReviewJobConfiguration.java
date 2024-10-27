@@ -1,13 +1,23 @@
 package app.batch.job;
 
-import app.batch.step.AlcoholStepConfiguration;
-import app.core.domain.alcohol.Alcohol;
+import app.batch.reader.BestReviewDTO;
+import app.core.domain.review.Review;
+import app.core.repository.JpaReviewRepository;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -17,52 +27,63 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 public class BestReviewJobConfiguration {
 
-  private final AlcoholStepConfiguration alcoholStepConfiguration;
+  private static final int CHUNK_SIZE = 10;
+  private final DataSource dataSource;
+  private final JpaReviewRepository reviewRepository;
+
+  @Value("${batch.query.best-review}")
+  private String besetReviewQuery;
 
   @Bean
-  public Job alcoholReadJob(
+  public Job bestReviewSelectedJob(
       JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-    log.info("AlcoholReadJobConfiguration 실행");
-    long startAt = System.nanoTime();
-
-    Job jpaPagingItemReaderJob =
-        new JobBuilder("pagingItemReaderJobSub", jobRepository)
-            .start(alcoholStepConfiguration.alcoholStep(jobRepository, transactionManager))
-            .build();
-
-    long endAt = System.nanoTime();
-
-    log.info("JpaPagingItemReaderJobConfiguration 실행 시간(ms) : {}", (endAt - startAt) / 1000000);
-    return jpaPagingItemReaderJob;
-  }
-
-  @Bean
-  public Job simpleJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-    log.info("SimpleJobConfiguration 실행");
-    return new JobBuilder("simple", jobRepository)
-        .start(alcoholStepConfiguration.simpleJob(jobRepository, transactionManager))
+    return new JobBuilder("bestReviewSelectedJob", jobRepository)
+        .start(reviewStep(jobRepository, transactionManager))
         .build();
   }
 
-  public ItemWriter<Alcohol> jpaPagingItemWriter() {
-    return list -> {
-      for (Alcohol alcohol : list) {
-        log.info(
-            "write thread name: {}, alcohol id: {}",
-            Thread.currentThread().getName(),
-            alcohol.getId());
+  public Step reviewStep(
+      JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    return new StepBuilder("bestReviewSelectedStep", jobRepository)
+        .<BestReviewDTO, Review>chunk(CHUNK_SIZE, transactionManager)
+        .reader(reviewReader())
+        .processor(reviewProcessor())
+        .writer(reviewWriter())
+        .build();
+  }
+
+  public JdbcCursorItemReader<BestReviewDTO> reviewReader() {
+
+    String decodedQuery =
+        new String(Base64.getDecoder().decode(besetReviewQuery), StandardCharsets.UTF_8);
+
+    return new JdbcCursorItemReaderBuilder<BestReviewDTO>()
+        .name("reviewReader")
+        .dataSource(dataSource)
+        .sql(decodedQuery)
+        .rowMapper(new BestReviewDTO.Mapper())
+        .build();
+  }
+
+  public ItemProcessor<BestReviewDTO, Review> reviewProcessor() {
+    return dto -> {
+      Review review = reviewRepository.findById(dto.getId()).orElse(null);
+      if (review != null) {
+        review.updateBest(true);
       }
+      return review;
     };
   }
 
-  public ItemWriter<? super Alcohol> simpleWriter() {
+  public ItemWriter<Review> reviewWriter() {
     return list -> {
-      for (Alcohol alcohol : list) {
-        log.info(
-            "write thread name: {}, alcohol id: {}",
-            Thread.currentThread().getName(),
-            alcohol.getId());
-      }
+      reviewRepository.saveAll(list);
+      list.forEach(
+          review ->
+              log.info(
+                  "Best review saved: review id: {}, best: {}",
+                  review.getId(),
+                  review.getIsBest()));
     };
   }
 }
