@@ -1,6 +1,6 @@
 package app.batch.processor;
 
-import app.core.domain.common.PopularData;
+import app.batch.reader.PopularModel;
 import app.core.domain.popular.PopularAlcohol;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -8,10 +8,10 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PopularProcessor implements ItemProcessor<PopularData, PopularAlcohol> {
+public class PopularProcessor implements ItemProcessor<PopularModel, PopularAlcohol> {
 
   @Override
-  public PopularAlcohol process(PopularData popularData) {
+  public PopularAlcohol process(PopularModel popularModel) {
 
     LocalDate currentDate = LocalDate.now();
 
@@ -20,14 +20,14 @@ public class PopularProcessor implements ItemProcessor<PopularData, PopularAlcoh
     final int day = currentDate.getDayOfMonth();
 
     return PopularAlcohol.builder()
-        .alcoholId(popularData.alcoholId())
+        .alcoholId(popularModel.alcoholId())
         .year(year)
         .month(month)
         .day(day)
-        .reviewScore(BigDecimal.valueOf(popularData.reviewScore()))
-        .ratingScore(BigDecimal.valueOf(popularData.ratingScore()))
-        .pickScore(BigDecimal.valueOf(popularData.pickScore()))
-        .popularScore(BigDecimal.valueOf(popularData.popularScore()))
+        .reviewScore(BigDecimal.valueOf(popularModel.reviewScore()))
+        .ratingScore(BigDecimal.valueOf(popularModel.ratingScore()))
+        .pickScore(BigDecimal.valueOf(popularModel.pickScore()))
+        .popularScore(BigDecimal.valueOf(popularModel.popularScore()))
         .build();
   }
 }

@@ -1,6 +1,6 @@
 package app.batch.job;
 
-import app.batch.reader.BestReviewDTO;
+import app.batch.reader.BestReviewModel;
 import app.core.domain.review.Review;
 import app.core.repository.JpaReviewRepository;
 import java.nio.charset.StandardCharsets;
@@ -45,29 +45,29 @@ public class BestReviewJobConfiguration {
   public Step reviewStep(
       JobRepository jobRepository, PlatformTransactionManager transactionManager) {
     return new StepBuilder("bestReviewSelectedStep", jobRepository)
-        .<BestReviewDTO, Review>chunk(CHUNK_SIZE, transactionManager)
+        .<BestReviewModel, Review>chunk(CHUNK_SIZE, transactionManager)
         .reader(reviewReader())
         .processor(reviewProcessor())
         .writer(reviewWriter())
         .build();
   }
 
-  public JdbcCursorItemReader<BestReviewDTO> reviewReader() {
+  public JdbcCursorItemReader<BestReviewModel> reviewReader() {
 
     String decodedQuery =
         new String(Base64.getDecoder().decode(besetReviewQuery), StandardCharsets.UTF_8);
 
-    return new JdbcCursorItemReaderBuilder<BestReviewDTO>()
+    return new JdbcCursorItemReaderBuilder<BestReviewModel>()
         .name("reviewReader")
         .dataSource(dataSource)
         .sql(decodedQuery)
-        .rowMapper(new BestReviewDTO.Mapper())
+        .rowMapper(new BestReviewModel.Mapper())
         .build();
   }
 
-  public ItemProcessor<BestReviewDTO, Review> reviewProcessor() {
+  public ItemProcessor<BestReviewModel, Review> reviewProcessor() {
     return dto -> {
-      Review review = reviewRepository.findById(dto.getId()).orElse(null);
+      Review review = reviewRepository.findById(dto.id()).orElse(null);
       if (review != null) {
         review.updateBest(true);
       }

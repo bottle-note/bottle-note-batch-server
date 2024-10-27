@@ -1,9 +1,9 @@
 package app.batch.step;
 
 import app.batch.processor.PopularProcessor;
+import app.batch.reader.PopularModel;
 import app.batch.reader.PopularReader;
 import app.batch.writer.PopularWriter;
-import app.core.domain.common.PopularData;
 import app.core.domain.popular.PopularAlcohol;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class PopularStepConfiguration {
     final int CHUNK_SIZE = 100;
 
     return new StepBuilder("popularStep", jobRepository)
-        .<PopularData, PopularAlcohol>chunk(CHUNK_SIZE, transactionManager)
+        .<PopularModel, PopularAlcohol>chunk(CHUNK_SIZE, transactionManager)
         .reader(popularReader.popularityItemReader())
         .processor(popularityProcessor)
         .writer(popularWriter.popularityItemWriter())
