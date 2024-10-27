@@ -26,6 +26,7 @@ spring:
 
 
 batch:
+  password: ${BATCH_PASSWORD:password}
   query:
     best-review: ${BEST_REVIEW_QUERY:SELECT * FROM review}
     popular: ${POPULAR_QUERY:SELECT * FROM review WHERE rating > 3}

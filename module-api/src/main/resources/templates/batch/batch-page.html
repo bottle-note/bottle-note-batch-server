@@ -51,12 +51,43 @@
                 </div>
             </div>
 
-            <button class="button is-primary" onclick="runBatch()">Run Selected Job</button>
+            <!-- Password Field -->
+            <div class="field">
+                <label class="label" for="password">비밀번호</label>
+                <div class="control">
+                    <input class="input" id="password" oninput="checkPassword()" placeholder="비밀번호를 입력하세요"
+                           type="password">
+                </div>
+                <p class="help">비밀번호가 맞으면 버튼이 활성화됩니다.</p>
+            </div>
+
+            <!-- Run Batch Job Button -->
+            <button class="button is-primary" disabled id="runButton" onclick="runBatch()">Run Selected Job</button>
         </div>
     </div>
 </section>
 
 <script>
+    function checkPassword() {
+        const password = document.getElementById("password").value;
+        const runButton = document.getElementById("runButton");
+
+        fetch('/batch/check-password', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({password: password})
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 서버에서 비밀번호가 유효하다고 응답할 경우 버튼 활성화
+                runButton.disabled = !data.valid;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                runButton.disabled = true;
+            });
+    }
+
     function runBatch() {
         const jobName = document.getElementById("jobName").value;
         fetch('/batch/run?jobName=' + jobName, {method: 'POST'})
